@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: auto;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        #container {
+            width: 960px;
+            height: 600px;
+            border: 1px solid black;
+            overflow: hidden;
+            background-image: url("img/mainBackground3.png");
+            background-size: cover;
+            background-position: center;
+            position:relative;
+        }
+        ul {
+            list-style: none;
+        }
+        ul li {
+            height: 50px;
+            width: 200px;
+        }
+        #lists {
+            margin-left: 280px;
+            margin-top : 170px;
+            width: 450px;
+            display: flex;
+            position:absolute;
+            bottom:40px;
+        }
+        .listTitle {
+            font-family: 'Oswald';
+            font-size: 50px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .menu {
+            font-family: 'Oswald';
+            font-size: 30px;
+            color: white;
+            position: relative;
+            width:200px;
+            height:200px;
+        }
+        .mute {
+            background-color: white;
+            border-radius:50%;
+            margin-top:7px;
+        }
+        #settingScreen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        #settingWrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        #title {
+            font-family: 'Oswald';
+            font-size: 100px;
+            font-weight:bold;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #volumeControl{
+            -webkit-appearance: none;
+            width:150px;
+            height:10px;
+            border-radius:4px;
+            background: linear-gradient(to right, white 0%, #ddd 50%);
+            outline:none;
+            position:absolute;
+            top:195px;
+            right:0px;
+        }
+
+        #volumeControl::-webkit-slider-runnable-track{
+            height:10px;
+            background:transparent;
+        }
+
+        #volumeControl::-webkit-slider-thumb{
+            -webkit-appearance: none;
+            appearance:none;
+            width:20px;
+            height:20px;
+            background: url("img/noOut.png");
+            border-radius:50%;
+            margin-top: -5px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+        function setHoverEffect(selector) {
+            $(selector).mouseover(function() {
+                $(this).css({
+                    "color": "blue",
+                    //"font-size": "40px",
+                    "cursor": "pointer"
+                });
+            }).mouseout(function() {
+                $(this).css({
+                    "color": "",
+                    "font-size": ""
+                });
+                if (selector === ".mute") {
+                    if (isMuted) {
+                        $(selector).css("color", "gray");
+                    } else {
+                        $(selector).css("color", "blue");
+                    }
+                }
+            });
+        }
+        setHoverEffect(".story");
+        setHoverEffect("#endless");
+        setHoverEffect(".settings");
+        setHoverEffect(".mute");
+        const clickSound = $("#click")[0];
+
+        /*$(".story").click(function() {
+
+            clickSound.currentTime = 0;
+            clickSound.play().then(() => {
+                const difficulty = $(this).text().toLowerCase(); // easy, normal, hard, endless
+                localStorage.setItem("difficulty", difficulty);
+                setTimeout(() => {
+                    window.location.href = "scene.html";
+                }, 100);
+            });
+        });*/
+
+        $("#easy").click(function() {
+            clickSound.currentTime = 0;
+            clickSound.play().then(() => {
+                localStorage.setItem("difficulty", "easy");
+                localStorage.setItem("storyStep", "beginning");
+                setTimeout(() => {
+                    window.location.href = "scene.html";
+                }, 100);
+            });
+        });
+
+        $("#normal").click(function() {
+            clickSound.currentTime = 0;
+            clickSound.play().then(() => {
+                localStorage.setItem("difficulty", "normal");
+                localStorage.setItem("storyStep", "afterEasy");
+                setTimeout(() => {
+                    window.location.href = "scene.html";
+                }, 100);
+            });
+        });
+
+        $("#hard").click(function() {
+            clickSound.currentTime = 0;
+            clickSound.play().then(() => {
+                localStorage.setItem("difficulty", "hard");
+                localStorage.setItem("storyStep", "afterNormal");
+                setTimeout(() => {
+                    window.location.href = "scene.html";
+                }, 100);
+            });
+        });
+
+        $("#endless").click(function() {
+            clickSound.currentTime = 0;
+            clickSound.play().then(() => {
+                const difficulty = "endless"; // easy, normal, hard, enless
+                localStorage.setItem("difficulty", difficulty);
+                setTimeout(() => {
+                    window.location.href = "story.html";
+                }, 100);
+            });
+        });
+        let isSettingsVisible = false;
+        /*$(".settings").click(function() {
+            isSettingsVisible = !isSettingsVisible;
+            if (isSettingsVisible) {
+                $("#settingScreen").css("display", "block");
+                $("#container").css("filter", "blur(5px)");
+            } else {
+                $("#settingScreen").css("display", "none");
+                $("#container").css("filter", "none");
+            }
+        });*/
+        let isMuted = true;
+
+        $(".mute").on("click", function(){
+            if($(this).attr("src") == "./img/UIBlock/sound.png"){
+                $(this).attr("src","./img/UIBlock/mute.png");
+                volume = $("#volumeControl").val();
+                bgm.muted = true;
+            }else{
+            clickSound.currentTime = 0;
+            clickSound.play();
+            $(this).attr("src","./img/UIBlock/sound.png");
+            bgm.muted = false;
+            bgm.play();
+            clickSound.muted = false;
+            }
+        });
+        const bgm = $("#bgm")[0];
+    $("#volumeControl").on("input", function(){
+        updateSliderBackground(this);
+            const vol = parseFloat($(this).val());
+            bgm.volume = vol;
+            clickSound.volume = vol;
+
+            if (vol === 0) {
+                $(".mute").attr("src", "./img/UIBlock/mute.png");
+            } else {
+                $(".mute").attr("src", "./img/UIBlock/sound.png");
+                bgm.muted = false;
+                bgm.play();
+                clickSound.muted = false;
+            }
+    });
+    });
+        window.onload = function() {
+            const bgm = document.getElementById("bgm");
+            bgm.volume = 0.5;
+            // 최고 점수 가져오는 기능.
+            const bestScore = localStorage.getItem("bestScore") || "0";
+            $("#bestScore").text("Your Best : " + bestScore);
+        };
+
+    function updateSliderBackground(el) {
+        const value = el.value;
+        const min = el.min || 0;
+        const max = el.max || 100;
+        const percent = ((value - min) / (max - min)) * 100;
+
+        el.style.background = `linear-gradient(to right, white ${percent}%, #ddd ${percent}%)`;
+    }
+
+    updateSliderBackground(volumeSlider);
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="title">Inning Break : 789</div>
+        <div id="lists">
+            <ul class="menu">
+                <li class="listTitle">Story</li>
+                <li id ="easy" class="story">Easy</li>
+                <li id = "normal" class="story">Normal</li>
+                <li id = "hard" class="story">Hard</li>
+            </ul>
+            <ul class="menu">
+                <li class="listTitle">Endless</li>
+                <li id="bestScore">Your Best : </li>
+                <li id="endless">Play Ball!</li>
+                <!-- <li class="settings">Settings</li> -->
+                 <!--<div class="mute">Title BGM</div>-->
+                <audio id="bgm" src="sound/hitNrun.mp3"></audio>
+                <audio id = "click" src = "sound/click.mp3" preload = "auto"></audio>
+                <img class = "mute" src = "img/UIBlock/mute.png">
+                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0">
+            </ul>
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1742,3 +1742,44 @@ window.onload = function() {
 //   rightPressed = false;
 //   leftPressed = false;
 // });
+
+
+function toggleAdminPanel() {
+  const panel = document.getElementById("adminPanel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+}
+
+function applyCounts() {
+  const s = parseInt(document.getElementById("strikeInput").value) || 0;
+  const b = parseInt(document.getElementById("ballInput").value) || 0;
+  const o = parseInt(document.getElementById("outInput").value) || 0;
+
+  strikes = Math.min(s, 2);
+  balls = Math.min(b, 3);
+
+  $("#S").empty().append("●".repeat(strikes));
+  $("#B").empty().append("●".repeat(balls));
+  $("#O").empty().append("●".repeat(o));
+}
+
+function applyScore() {
+  const newScore = parseInt(document.getElementById("scoreInput").value) || 0;
+  score = newScore;
+  scores = newScore;
+  alert("점수 업데이트됨: " + newScore);
+}
+
+function clearBricks() {
+  totalBrick = 0;
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      const b = bricks[c][r];
+      if (b && b.status !== 0) {
+        b.status = 0;
+      }
+    }
+  }
+
+  decreaseBar(); // 게이지 줄이기 (남은 블록이 없다는 상태 전달)
+  alert("모든 블록이 제거되었습니다!");
+}

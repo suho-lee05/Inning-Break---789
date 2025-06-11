@@ -1430,7 +1430,8 @@ function walk() {
   $("#B").empty();
   $("#S").empty();
   updateStrikeBallDisplay();
-
+  goCount = 0;
+  brickDy = 0;
   // 타자 교체 처리
   $("#playerList li").eq(0).remove(); // 현재 타자 제거
   addPlayer();                        // 다음 타자 추가

@@ -276,8 +276,8 @@ function initGameState() {
 
 function initBall() {
   if(currentDifficulty=="easy"){
-    dx = 3;
-    dy = -3;
+    dx = 4;
+    dy = -4;
   }else if(currentDifficulty=="normal"){
     dx = 4;
     dy = -4;
@@ -402,8 +402,10 @@ function storyEasy() {
   brickRowCount = 4;
   brickColumnCount = 5;
   lives = 3;
-  dx = 3;
-  dy = -3;
+  dx = 4;
+  dy = -4;
+  console.log(dx);
+  console.log(dy);
 
   var tmp = brickColumnCount * brickRowCount / 4 ;
   hit1 = tmp * 3;
@@ -832,15 +834,15 @@ function collisionDetection() {
   let tempX = x;
   let tempY = y;
 
-  for (let s = 0; s < steps; s++) {
+  for (let s = 0; s < steps; s++) { //5단계의 반복문 프레임을 검사
     tempX += stepDx;
     tempY += stepDy;
 
     let hit = false;
-    for (let c = 0; c < brickColumnCount; c++) {
+    for (let c = 0; c < brickColumnCount; c++) {  //2중 반복문으로 모든 브릭을 검사
       for (let r = 0; r < brickRowCount; r++) {
-        const b = bricks[c][r];
-        if (b.status === 0) continue;
+        const b = bricks[c][r];                 //b는 벽돌 객체
+        if (b.status === 0) continue;           //
 
         const brickLeft = b.x;
         const brickRight = b.x + brickWidth;
@@ -952,7 +954,7 @@ function resetBallAndPaddle() {
   y = canvas.height - 30;
   // 난이도에 맞게 공 dx, dy 설정.
   switch (currentDifficulty) {
-    case "easy": dx = 3; dy = -3; break;
+    case "easy": dx = 4; dy = -4; break;
     case "normal": dx = 4; dy = -4; break;
     case "hard": dx = 3; dy = -3; break;
     case "endless": dx = 4; dy = -4; break;
